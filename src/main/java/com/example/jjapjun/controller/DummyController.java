@@ -5,7 +5,6 @@ import com.example.jjapjun.repository.UserRepository;
 import com.example.jjapjun.role.UserRole;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 @Slf4j
 @RestController
@@ -73,17 +71,15 @@ public class DummyController {
         user.setEmail(requestUser.getEmail());
         //userRepository.save(user);
 
-        return user;
+        return null;
     }
 
     @DeleteMapping("/dummy/user/{id}")
-    public String delete(@PathVariable Long id) {
-        try {
-            userRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException e) {
-            return "삭제실패";
-        }
-
-        return "삭제완료";
+    public User deleteUser(@PathVariable Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> {
+            return new IllegalArgumentException("삭제 실패");
+        });
+        userRepository.deleteById(id);
+        return null;
     }
 }
