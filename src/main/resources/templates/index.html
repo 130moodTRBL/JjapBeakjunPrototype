@@ -18,17 +18,20 @@
   </button>
   <div class="collapse navbar-collapse" id="collapsibleNavbar">
     <ul class="navbar-nav">
-      <li class="nav-item">
+      <li class="nav-item" th:if="${status}">
+        <a class="nav-link" th:text="${loginUser.username}" th:href="@{/user/{userId}(userId=${loginUser.id})}"></a>
+      </li>
+      <li class="nav-item" th:if="${status}">
+        <a class="nav-link" href="/user/logout">logout</a>
+      </li>
+      <li class="nav-item" th:if="${!status}">
         <a class="nav-link" href="/user/loginForm">login</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/user/registerForm">register</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
+      <li class="nav-item" th:if="${status}">
+        <a class="nav-link" href="/board/writeForm">write</a>
       </li>
     </ul>
   </div>
@@ -36,24 +39,31 @@
 <br>
 
 <div class="container"> <!-- 페이지 메인 내용-->
+
+  <tbody>
+  <tr th:each="board:${boards}">
+    <td><a href="item.html" th:href="@{/board/{boardId}(boardId=${board.id})}" th:text="${board.id}">boardId</a></td>
+    <td><a href="item.html" th:href="@{/board/{boardId}(boardId=${board.id})}" th:text="${board.title}">제목</a></td>
+    <td th:text="${board.user}"></td>
+    <br>
+  </tr>
+  </tbody>
+
   <div class="card m-2">
     <div class="card-body">
       <h4 class="card-title">제목</h4>
-      <p class="card text">내용</p>
       <a href="#" class="btn btn-primary">see profile</a>
     </div>
   </div>
   <div class="card m-2">
     <div class="card-body">
       <h4 class="card-title">제목</h4>
-      <p class="card text">내용</p>
       <a href="#" class="btn btn-primary">see profile</a>
     </div>
   </div>
   <div class="card m-2">
     <div class="card-body">
       <h4 class="card-title">제목</h4>
-      <p class="card text">내용</p>
       <a href="#" class="btn btn-primary">see profile</a>
     </div>
   </div>
