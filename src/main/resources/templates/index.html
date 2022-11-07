@@ -38,8 +38,12 @@
 </nav>
 <br>
 
-<div class="container"> <!-- 페이지 메인 내용-->
+<form th:action="@{/}" method="get">
+  <input type="text" name="keyword">
+  <button type="submit">search</button>
+</form>
 
+<div class="container"> <!-- 페이지 메인 내용-->
   <tbody>
   <tr th:each="board:${boards}">
     <td><a href="item.html" th:href="@{/board/{boardId}(boardId=${board.id})}" th:text="${board.id}">boardId</a></td>
@@ -48,25 +52,6 @@
     <br>
   </tr>
   </tbody>
-
-  <div class="card m-2">
-    <div class="card-body">
-      <h4 class="card-title">제목</h4>
-      <a href="#" class="btn btn-primary">see profile</a>
-    </div>
-  </div>
-  <div class="card m-2">
-    <div class="card-body">
-      <h4 class="card-title">제목</h4>
-      <a href="#" class="btn btn-primary">see profile</a>
-    </div>
-  </div>
-  <div class="card m-2">
-    <div class="card-body">
-      <h4 class="card-title">제목</h4>
-      <a href="#" class="btn btn-primary">see profile</a>
-    </div>
-  </div>
 </div>
 
 <br>
@@ -74,6 +59,7 @@
   <p>Create By sonic6679</p>
   <p>010 2144 8285</p>
   <p>sonic6679@naver.com</p>
+  <p>살려줘 개새끼들아</p>
 </div>
 
 </html>

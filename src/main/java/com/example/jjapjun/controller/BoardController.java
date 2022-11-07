@@ -7,6 +7,10 @@ import com.example.jjapjun.repository.BoardRepository;
 import com.example.jjapjun.service.BoardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,8 +31,15 @@ public class BoardController {
     }
 
     @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("boards", boardRepository.findAll());
+    public String index(Model model, String keyword, @PageableDefault(sort = "id", direction = Sort.Direction.DESC)Pageable pageable) {
+        Page<Board> boards = null;
+        if(keyword == null) {
+            boards = boardService.boardList(pageable);
+        }
+        else {
+            boards = boardService.boardSearchList(keyword, pageable);
+        }
+        model.addAttribute("boards", boards);
         model.addAttribute("status", MySession.status);
         model.addAttribute("loginUser", MySession.user);
         return "index";
@@ -66,6 +77,7 @@ public class BoardController {
         model.addAttribute("user", user);
         model.addAttribute("loginUser", MySession.user);
         model.addAttribute("status", MySession.status);
+        boardService.viewCount(board);
 
         return "board/detail";
     }
