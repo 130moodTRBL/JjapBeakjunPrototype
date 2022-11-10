@@ -22,15 +22,24 @@ public class BoardService {
     }
 
     @Transactional
-    public void write(Board board, User user) {
+    public Board write(Board board, User user) {
+        if(!duplicateBoard(board)) return null;
         board.setUser(user);
         boardRepository.save(board);
+        return board;
     }
 
     @Transactional
     public void viewCount(Board board) {
         int curView = board.getView();
         board.setView(curView + 1);
+    }
+
+    public boolean duplicateBoard(Board board) {
+        if(board.getTitle() == "" || board.getTitle() == " ") return false;
+        if(board.getContent() == "" || board.getContent() == " ") return false;
+        if(board.getAnswer() == "" || board.getAnswer() == " ")  return false;
+        return true;
     }
 
     public Page<Board> boardList(Pageable pageable) {

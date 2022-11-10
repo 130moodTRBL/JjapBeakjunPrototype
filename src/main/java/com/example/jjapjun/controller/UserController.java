@@ -33,24 +33,8 @@ public class UserController {
 
     @PostMapping("/user/register")
     public String register(User user) {
-        user.setUserRole(UserRole.USER);
-        if(!duplicateRegister(user)) return "redirect:/user/registerForm";
-        userRepository.save(user);
+        if(userService.register(user) == null) return "redirect:/user/registerForm";
         return "redirect:/";
-    }
-
-    public boolean duplicateRegister(User user) {
-        if(user.getUsername() == "" || user.getUsername() == " ") return false;
-
-        int charCount = 0; int numCount = 0;
-        String userPassword = user.getPassword();
-        if(userPassword == " " || userPassword == "" || userPassword.length() < 5) return false;
-        for (int i = 0; i < userPassword.length(); i++) {
-            if(userPassword.charAt(i) >= '0' && userPassword.charAt(i) <= '9') numCount++;
-            else charCount++;
-        }
-        if(charCount <= 0 || numCount <= 0) return false;
-        return true;
     }
 
     @PutMapping("/user/update/{id}")
@@ -79,14 +63,7 @@ public class UserController {
 
     @PostMapping("/user/login")
     public String login(User user) {
-        User principal = userService.login(user);
-        MySession.user = principal;
-        MySession.status = true;
-        log.info("user: {} 로그인함", user.getUsername());
-
-        log.info("username={}", principal.getUsername());
-        log.info("password={}", principal.getPassword());
-        log.info("email={}", principal.getEmail());
+        userService.login(user);
         return "redirect:/";
     }
 

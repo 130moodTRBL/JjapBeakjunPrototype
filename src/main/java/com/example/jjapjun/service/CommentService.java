@@ -31,4 +31,9 @@ public class CommentService {
     public Page<Comment> commentList(Pageable pageable) {
         return commentRepository.findAll(pageable);
     }
+
+    @Transactional
+    public Page<Comment> commentFormBoard(Pageable pageable, Long id) {
+        return commentRepository.findByBoard_Id(id, pageable);
+    }
 }

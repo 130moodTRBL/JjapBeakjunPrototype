@@ -56,24 +56,15 @@ public class BoardController {
 
     @PostMapping("/board/write")
     public String write(Board board) {
-        if(!duplicateBoard(board)) return new IllegalArgumentException("잘못된 글쓰기").toString();
         User loginUser = MySession.user;
-        log.info("user: {}, 글쓰기 시도", loginUser.getUsername());
-        if(loginUser == null) return new Exception("로그인을 하지 않았습니다").toString();
+        if(boardService.write(board, loginUser) ==  null) return "redirect:/board/writeForm";
         boardService.write(board, loginUser);
         return "redirect:/";
     }
 
-    public boolean duplicateBoard(Board board) {
-        if(board.getTitle() == "" || board.getTitle() == " ") return false;
-        if(board.getContent() == "" || board.getContent() == " ") return false;
-        if(board.getAnswer() == "" || board.getAnswer() == " ")  return false;
-        return true;
-    }
-
     @GetMapping("/board/{id}")
     public String boardDetail(@PathVariable Long id, Model model, Pageable pageable) {
-        Page<Comment> comments = commentService.commentList(pageable);
+        Page<Comment> comments = commentService.commentFormBoard(pageable, id);
         Board board = boardRepository.findById(id).orElseThrow(() -> {
             return new IllegalArgumentException("잘못된 경로");
         });
